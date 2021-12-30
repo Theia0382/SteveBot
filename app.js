@@ -4,6 +4,21 @@ const { token } = require( './config.json' );
 
 const client = new Client( { intents : [ Intents.FLAGS.GUILDS ] } );
 
+const eventFiles = fs.readdirSync( './events' ).filter( file => file.endsWith( '.js' ) );
+
+for ( const file of eventFiles )
+{
+    const event = require( `./events/${file}` );
+    if ( event.once )
+    {
+        client.once( event.name, ( ...arg ) => event.execute( ...arg ) );
+    }
+    else
+    {
+        client.on( event.name, ( ...arg ) => event.execute( ...arg ) );
+    }
+}
+
 client.commands = new Collection( );
 const commandFiles = fs.readdirSync( './commands' ).filter( file => file.endsWith( '.js' ) );
 
@@ -13,13 +28,10 @@ for ( const file of commandFiles )
     client.commands.set( command.data.name, command );
 }
 
-client.once( 'ready', ( ) =>
-{
-    console.log( 'Ready!' );
-} );
-
 client.on( 'interactionCreate', async interaction =>
 {
+    console.log( `${interaction.user.tag} in #${interaction.channel.name} triggered an interaction.` );
+
 	if ( !interaction.isCommand( ) )
     {
         return;
