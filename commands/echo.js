@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require( '@discordjs/builders' );
 module.exports = 
 {
     data : new SlashCommandBuilder( )
-        .setName( 'echo' )
+        .setName( '메아리' )
         .setDescription( '입력을 그대로 답장합니다.' )
         .addStringOption( option => option
             .setName( '입력' )

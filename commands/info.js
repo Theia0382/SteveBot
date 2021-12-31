@@ -3,8 +3,9 @@ const { SlashCommandBuilder } = require( '@discordjs/builders' );
 module.exports =
 {
     data : new SlashCommandBuilder( )
-        .setName( 'info' )
+        .setName( '정보' )
         .setDescription( '사용자나 서버의 정보를 불러옵니다.' )
+
         .addSubcommand( subcommand => subcommand
             .setName( '사용자' )
             .setDescription( '사용자에 대한 정보' )
@@ -12,6 +13,7 @@ module.exports =
                 .setName( '목표' )
                 .setDescription( '사용자 지정' )
                 .setRequired( true ) ) )
+
         .addSubcommand( subcommand => subcommand
             .setName( '서버' )
             .setDescription( '서버에 대한 정보' ) ),
