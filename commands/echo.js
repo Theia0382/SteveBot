@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require( '@discordjs/builders' );
-const { execute } = require('./ping');
 
 module.exports = 
 {
