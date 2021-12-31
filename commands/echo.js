@@ -14,6 +14,6 @@ module.exports =
     {
         const input = interaction.options.getString( '입력' );
 
-        interaction.reply( input );
+        await interaction.reply( input );
     }
 };
