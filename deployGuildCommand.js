@@ -20,11 +20,11 @@ const rest = new REST( { version : '9' } ).setToken( token );
 {
     try
     {
-        console.log( '봇 명령 새로 고침 시도' );
+        console.log( '봇 서버 명령 새로 고침 시도' );
 
         await rest.put( Routes.applicationGuildCommands( clientID, guildID ), { body : commands } );
 
-        console.log( '봇 명령 새로 고침 성공');
+        console.log( '봇 서버 명령 새로 고침 성공');
     }
     catch ( error )
     {
