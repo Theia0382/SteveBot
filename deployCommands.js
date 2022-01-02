@@ -1,7 +1,7 @@
 const fs = require( 'fs' );
 const { REST } = require( '@discordjs/rest' );
 const { Routes } = require( 'discord-api-types/v9' );
-const { clientID, guildID, token } = require( './config.json' );
+const { clientID, token } = require( './config.json' );
 
 const commands = [ ];
 const commandFiles = fs.readdirSync( './commands' ).filter( file => file.endsWith( '.js' ) );
@@ -22,7 +22,7 @@ const rest = new REST( { version : '9' } ).setToken( token );
     {
         console.log( '봇 전역 명령 새로 고침 시도' );
 
-        await rest.put( Routes.applicationCommands( clientID, guildID ), { body : commands } );
+        await rest.put( Routes.applicationCommands( clientID ), { body : commands } );
 
         console.log( '봇 전역 명령 새로 고침 성공');
     }
