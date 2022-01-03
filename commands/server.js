@@ -23,7 +23,6 @@ module.exports =
             }
 
             const parsedData = JSON.parse( data );
-            console.log( parsedData );
             
             let state;
             if ( parsedData[ 'serverOpen' ] == true ) 

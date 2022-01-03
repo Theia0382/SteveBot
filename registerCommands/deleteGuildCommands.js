@@ -10,11 +10,11 @@ const rest = new REST( { version : '9' } ).setToken( token );
 {
     try
     {
-        console.log( '봇 전역 명령 삭제 시도' );
+        console.log( '봇 서버 명령 삭제 시도' );
 
-        await rest.put( Routes.applicationCommands( clientID, guildID ), { body : commands } );
+        await rest.put( Routes.applicationGuildCommands( clientID, guildID ), { body : commands } );
 
-        console.log( '봇 전역 명령 삭제 성공');
+        console.log( '봇 서버 명령 삭제 성공');
     }
     catch ( error )
     {

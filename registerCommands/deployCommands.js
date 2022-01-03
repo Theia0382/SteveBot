@@ -4,12 +4,12 @@ const { Routes } = require( 'discord-api-types/v9' );
 const { clientID, token } = require( './config.json' );
 
 const commands = [ ];
-const commandFiles = fs.readdirSync( './commands' ).filter( file => file.endsWith( '.js' ) );
+const commandFiles = fs.readdirSync( '../commands' ).filter( file => file.endsWith( '.js' ) );
 
 for ( const file of commandFiles )
 {
     console.log( `명령 목록에 ${file} 등록 시도` );
-    const command = require( `./commands/${file}` );
+    const command = require( `../commands/${file}` );
     commands.push( command.data.toJSON( ) );
     console.log( `명령 목록에 ${file} 등록 성공` );
 }
