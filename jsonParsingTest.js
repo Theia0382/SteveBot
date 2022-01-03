@@ -1,6 +1,6 @@
 const fs = require( 'fs' );
 
-fs.readFile( 'data.json', 'utf8', ( error, data ) =>
+fs.readFile( './cache/serverInfo.json', 'utf8', ( error, data ) =>
 {
 	if ( error )
     {

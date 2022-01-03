@@ -1,6 +1,6 @@
 const https = require( 'https' );
 
-https.get( 'https://minecraft-api.com/api/ping/raptureax.asuscomm.com/5400/json', ( response ) =>
+https.get( 'https://minecraft-api.com/api/ping/raptureax.asuscomm.com/5400/json', function( response )
 {
     console.log( 'statusCode :', response.statusCode );
     
@@ -9,7 +9,7 @@ https.get( 'https://minecraft-api.com/api/ping/raptureax.asuscomm.com/5400/json'
         process.stdout.write( data );
     } );
 
-} ).on('error', ( error ) =>
+} ).on( 'error', ( error ) =>
 {
     console.error( error );
 } );

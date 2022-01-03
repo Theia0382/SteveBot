@@ -29,7 +29,7 @@ for ( const file of commandFiles )
     client.commands.set( command.data.name, command );
 }
 
-client.on( 'interactionCreate', async interaction =>
+client.on( 'interactionCreate', async ( interaction ) =>
 {
     console.log( `${interaction.user.tag} in #${interaction.channel.name} triggered an interaction.` );
 
@@ -56,7 +56,7 @@ client.on( 'interactionCreate', async interaction =>
     }
 } );
 
-client.on( 'messageCreate', message =>
+client.on( 'messageCreate', ( message ) =>
 {
     console.log( `${message.author.tag} : ${message.content}` );
 } );
