@@ -22,18 +22,22 @@ module.exports =
                 throw error;
             }
 
-            if ( data.startsWith( 'Failed' ) ) 
+            const parsedData = JSON.parse( data );
+            console.log( parsedData );
+            
+            let state;
+            if ( parsedData[ 'serverOpen' ] == true ) 
             {
-                const state = '닫힘';
+                state = '열림';
             }
             else
             { 
-                const state = '열림';
-                const serverName = JSON.parse( data ).description.text;
-                const maxUser = JSON.parse( data ).players.max;
-                const onlineUser = JSON.parse( data ).players.online;
-                const serverVersion = JSON.parse( data ).version.name;
+                state = '닫힘';
             }
+            const serverName = parsedData.description.text;
+            const maxUser = parsedData.players.max;
+            const onlineUser = parsedData.players.online;
+            const serverVersion = parsedData.version.name;
         
             const Embed = new Discord.MessageEmbed( )
                 .setColor( '#4432a8' )
@@ -46,16 +50,16 @@ module.exports =
                 )
                 .setTitle( '서버 정보' )
                 .setDescription( `서버 주소 :\n${serverAddress}\n` )
-                .addField( '서버 상태' , `${state}` );
+                .addField( '서버 상태' , `${state}` )
+                .setFooter( `게임 버전 : ${serverVersion}` )
+                .setTimestamp( );
 
-            if ( state === '열림' )
+            if ( parsedData[ 'serverOpen' ] )
             {
-                Embed
-                    .addField( '접속 중' , `${onlineUser}/${maxUser}` )
-                    .setFooter( `게임 버전 : ${serverVersion}` );
+                Embed.addField( '접속 중' , `${onlineUser}/${maxUser}` );
             }
                             
-            interaction.editReply( { embeds: [ Embed.setTimestamp( ) ] } );
+            interaction.editReply( { embeds: [ Embed ] } );
             return;
         } );
     }

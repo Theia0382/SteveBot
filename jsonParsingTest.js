@@ -9,10 +9,14 @@ fs.readFile( './cache/serverInfo.json', 'utf8', ( error, data ) =>
 
     console.log( data, '\n\n' );
 
-    var serverName = JSON.parse( data ).description.text;
-    var serverVersion = JSON.parse( data ).version.name;
-    var onlinePlayer = JSON.parse( data ).players.online;
-    var maxPlayer = JSON.parse( data ).players.max;
+    const parsedData = JSON.parse( data );
+
+    console.log( parsedData, '\n\n' );
+
+    const serverName = parsedData.description.text;
+    const serverVersion = parsedData.version.name;
+    const onlinePlayer = parsedData.players.online;
+    const maxPlayer = parsedData.players.max;
 
     console.log
     (

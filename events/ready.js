@@ -1,7 +1,8 @@
 const https = require( 'https' );
 const fs = require( 'fs' );
 
-let serverInfo;
+let serverOpen;
+const cacheUrl = './cache/serverInfo.json';
 
 async function getServerInfo( )
 {
@@ -11,15 +12,46 @@ async function getServerInfo( )
         response.setEncoding( 'utf8' );
         response.on( 'data', ( data ) =>
         {
-            fs.writeFile( './cache/serverInfo.json', data, 'utf8', ( error ) =>
+            if ( data.startsWith( 'Failed' ) )
             {
-                if ( error )
+                serverOpen = false;
+                
+                fs.readFile( cacheUrl, 'utf8', ( error, data ) =>
                 {
-                    throw error;
-                }
+                    if ( error )
+                    {
+                        throw error;
+                    }
 
-                serverInfo = data;
-            } );
+                    let parsedData = JSON.parse( data );
+                    parsedData[ 'serverOpen' ] = false;
+                    data = JSON.stringify( parsedData );
+
+                    fs.writeFile( cacheUrl, data, 'utf8', ( error ) =>
+                    {
+                        if ( error )
+                        {
+                            throw error;
+                        }
+                    } );
+                } );
+            }
+            else 
+            {
+                serverOpen = true;
+
+                let parsedData = JSON.parse( data );
+                parsedData[ 'serverOpen' ] = true;
+                data = JSON.stringify( parsedData );
+
+                fs.writeFile( cacheUrl, data, 'utf8', ( error ) =>
+                {
+                    if ( error )
+                    {
+                        throw error;
+                    }
+                } );
+            }
         } );
     } );
 }
@@ -33,18 +65,18 @@ module.exports =
     {
         console.log( `Ready! Logged in as ${client.user.tag}` );
         client.user.setActivity( 'STEVE READY!' );
-        getServerInfo( );
+        await getServerInfo( );
         setInterval( ( ) =>
         {
             getServerInfo( );
 
-            if ( serverInfo.startsWith( 'Failed' ) ) 
+            if ( serverOpen ) 
             {
-                client.user.setActivity( '서버 닫힘' );
+                client.user.setActivity( '서버 열림' );
             }
             else
             {
-                client.user.setActivity( '서버 열림' );
+                client.user.setActivity( '서버 닫힘' );
             }
         }, 10000 );
     }
