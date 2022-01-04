@@ -56,6 +56,18 @@ module.exports =
             if ( parsedData[ 'serverOpen' ] )
             {
                 Embed.addField( '접속 중' , `${onlineUser}/${maxUser}` );
+                
+                if ( onlineUser > 0 )
+                {
+                    let userList = '';
+                    for ( let i = 0; i < onlineUser; i++ )
+                    {
+                        userList = userList + `\n${parsedData[ 'players' ][ 'sample' ][ i ][ 'name' ]}`
+                    }
+                    console.log( `플레이어 목록${userList}` );
+
+                    Embed.addField( '플레이어 목록', userList );
+                }
             }
                             
             interaction.editReply( { embeds: [ Embed ] } );
