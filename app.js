@@ -1,15 +1,14 @@
 const fs = require( 'fs' );
 const { Client, Collection, Intents } = require( 'discord.js' );
-const { token } = require( './config.json' );
+const config = require( './config' );
 
 const client = new Client( { intents : [ Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES ] } );
 
-const eventFiles = fs.readdirSync( './events' ).filter( file => file.endsWith( '.js' ) );
-
+// events 폴더의 이벤트 등록
+const eventFiles = fs.readdirSync( './events' ).filter( ( file ) => file.endsWith( '.js' ) );
 for ( const file of eventFiles )
 {
     const event = require( `./events/${file}` );
-    
     if ( event.once )
     {
         client.once( event.name, ( ...arg ) => event.execute( ...arg ) );
@@ -20,46 +19,13 @@ for ( const file of eventFiles )
     }
 }
 
+// commands 폴더의 이벤트 등록
 client.commands = new Collection( );
-const commandFiles = fs.readdirSync( './commands' ).filter( file => file.endsWith( '.js' ) );
-
+const commandFiles = fs.readdirSync( './commands' ).filter( ( file ) => file.endsWith( '.js' ) );
 for ( const file of commandFiles )
 {
     const command = require( `./commands/${file}` );
     client.commands.set( command.data.name, command );
 }
 
-client.on( 'interactionCreate', async ( interaction ) =>
-{
-    console.log( `${interaction.user.tag} in #${interaction.channel.name} triggered an interaction.` );
-
-	if ( !interaction.isCommand( ) )
-    {
-        return;
-    }
-
-	const command = client.commands.get( interaction.commandName );
-
-    if ( !command )
-    {
-        return;
-    }
-
-    try
-    {
-        await command.execute( interaction );
-    }
-    catch ( error )
-    {
-        console.error( error );
-        await interaction.reply( { content : '명령을 실행하던 중 에러가 발생했습니다!', ephemeral : true } );
-    }
-} );
-
-client.on( 'messageCreate', ( message ) =>
-{
-    console.log( `${message.author.tag} : ${message.content}` );
-} );
-
-
-client.login( token );
+client.login( config.token );
