@@ -48,8 +48,8 @@ module.exports =
                     }
                 )
                 .setTitle( '서버 정보' )
-                .setDescription( `서버 주소 :\n${serverAddress}\n` )
-                .addField( '서버 상태' , `${state}` )
+                .addField( '서버 주소', serverAddress )
+                .addField( '서버 상태', state )
                 .setFooter( `게임 버전 : ${serverVersion}` )
                 .setTimestamp( );
 
