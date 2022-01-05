@@ -11,7 +11,6 @@ function editObject( object, address, value )
         {
             return element != '';
         } );
-    console.log( key );
 
     let objectCache = [ ];
 
@@ -30,7 +29,6 @@ function editObject( object, address, value )
         }
         objectCache[ i ] = object;
         object = object[ key[ i ] ];
-        console.log( objectCache[ i ] );
     }
 
     object = value;
