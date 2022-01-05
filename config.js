@@ -1,19 +1,62 @@
 const fs = require( 'fs' );
 
-let data = fs.readFileSync( './config.json', 'utf8', ( error ) =>
+function editObject( object, address, value )
 {
-    if ( error )
+    const key = address.split( '.' );
+
+    let objectCache = [ ];
+
+    for ( i = 0; i < key.length; i++ )
     {
-        throw error;
+        objectCache[ i ] = object;
+        object = object[ key[ i ] ];
     }
-} );
 
-let config = JSON.parse( data );
+    object = value;
+    
+    for ( i = key.length - 1; i > -1; i-- )
+    {
+        objectCache[ i ][ key[ i ] ] = object;
+        object = objectCache[ i ];
+    }
 
-// config.json의 정보도 같이 수정되야 할 때 부르는 함수
-const editConfig = function( key, value )
+    return object;
+}
+
+const get = function( address )
 {
-    config[ key ] = value;
+    const data = fs.readFileSync( './config.json', 'utf8', ( error ) =>
+    {
+        if ( error )
+        {
+            throw error;
+        }
+    } );
+
+    let config = JSON.parse( data );
+
+    const key = address.split( '.' );
+
+    for ( i = 0; i < key.length; i++ )
+    {
+        config = config[ key[ i ] ];
+    }
+
+    return config;
+}
+
+const edit = function( address, value )
+{
+    let data = fs.readFileSync( './config.json', 'utf8', ( error ) =>
+    {
+        if ( error )
+        {
+            throw error;
+        }
+    } );
+
+    let config = JSON.parse( data );
+    config = editObject( config, address, value );
 
     data = JSON.stringify( config );
     fs.writeFileSync( './config.json', data, 'utf8', ( error ) =>
@@ -25,4 +68,4 @@ const editConfig = function( key, value )
     } );
 }
 
-module.exports = Object.assign( config, { editConfig } );
+module.exports = { get, edit }

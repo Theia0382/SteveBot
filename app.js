@@ -28,4 +28,4 @@ for ( const file of commandFiles )
     client.commands.set( command.data.name, command );
 }
 
-client.login( config.token );
+client.login( config.get( 'token' ) );

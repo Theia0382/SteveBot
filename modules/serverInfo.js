@@ -6,7 +6,7 @@ const common = async function( interaction )
 {
     await interaction.deferReply( );
 
-    fs.readFile( `${config.cacheUrl}/serverInfo.json`, 'utf8', async ( error, data ) =>
+    fs.readFile( `${config.get( 'cacheUrl' )}/serverInfo.json`, 'utf8', async ( error, data ) =>
     {
         if ( error )
         {
@@ -39,7 +39,7 @@ const common = async function( interaction )
                 }
             )
             .setTitle( '서버 정보' )
-            .addField( '서버 주소', config.serverAddress )
+            .addField( '서버 주소', config.get( 'serverAddress' ) )
             .addField( '서버 상태', state )
             .setFooter( { text : `게임 버전 : ${serverVersion}` } )
             .setTimestamp( );
@@ -55,12 +55,11 @@ const common = async function( interaction )
                 {
                     userList = await userList + `\n${parsedData.players.sample[ i ].name}`
                 }
-                console.log( `플레이어 목록${userList}` );
 
                 await Embed.addField( '플레이어 목록', userList );
             }
         }
-                        
+
         interaction.editReply( { embeds: [ Embed ] } );
     } );
 }

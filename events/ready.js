@@ -4,7 +4,7 @@ const config = require( '../config' );
 
 function getServerInfo( client )
 {
-    const url = `https://minecraft-api.com/api/ping/${config.serverAddress.replace(':', '/')}/json`;
+    const url = `https://minecraft-api.com/api/ping/${config.get( 'serverAddress' ).replace(':', '/')}/json`;
     https.get( url, ( response ) => 
     {
         response.setEncoding( 'utf8' );
@@ -21,7 +21,7 @@ function getServerInfo( client )
             }
             else 
             {
-                data = fs.readFileSync( `${config.cacheUrl}/serverInfo.json`, 'utf8', ( error ) =>
+                data = fs.readFileSync( `${config.get( 'cacheUrl' )}/serverInfo.json`, 'utf8', ( error ) =>
                 {
                     if ( error )
                     {
@@ -37,7 +37,7 @@ function getServerInfo( client )
 
             data = JSON.stringify( parsedData );
 
-            fs.writeFile( `${config.cacheUrl}/serverInfo.json`, data, 'utf8', ( error ) =>
+            fs.writeFile( `${config.get( 'cacheUrl' )}/serverInfo.json`, data, 'utf8', ( error ) =>
             {
                 if ( error )
                 {
