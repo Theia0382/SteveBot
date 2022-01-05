@@ -2,14 +2,35 @@ const fs = require( 'fs' );
 
 function editObject( object, address, value )
 {
-    const key = address.split( '.' );
+    const key = address
+        .replace( /\./g, ' ' )
+        .replace( /\[/g, ' ' )
+        .replace( /\]/g, ' ' )
+        .split( ' ' )
+        .filter( ( element ) =>
+        {
+            return element != '';
+        } );
+    console.log( key );
 
     let objectCache = [ ];
 
     for ( i = 0; i < key.length; i++ )
     {
+        if ( !object[ key[ i ] ] )
+        {
+            if ( Number.isInteger( Number( key[ i + 1 ] ) ) )
+            {
+                object[ key[ i ] ] = [ ];
+            }
+            else
+            {
+                object[ key[ i ] ] = { };
+            }
+        }
         objectCache[ i ] = object;
         object = object[ key[ i ] ];
+        console.log( objectCache[ i ] );
     }
 
     object = value;
@@ -35,10 +56,14 @@ const get = function( address )
 
     let config = JSON.parse( data );
 
-    const key = address.split( '.' );
+    const key = address.split( '.| |[|]' );
 
     for ( i = 0; i < key.length; i++ )
     {
+        if ( !config[ key[ i ] ] )
+        {
+            return undefined;
+        }
         config = config[ key[ i ] ];
     }
 
