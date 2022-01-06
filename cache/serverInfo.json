@@ -1,1 +1,14 @@
-{"description":{"text":"A Minecraft Server"},"players":{"max":10,"online":0},"version":{"name":"1.18.1","protocol":757},"serverOpen":true}
+{
+    "description": {
+        "text": "A Minecraft Server"
+    },
+    "players": {
+        "max": 10,
+        "online": 0
+    },
+    "version": {
+        "name": "1.0.0",
+        "protocol": 0
+    },
+    "serverOpen": false
+}

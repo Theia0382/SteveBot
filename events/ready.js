@@ -37,11 +37,14 @@ function getServerInfo( client )
                     const cachedPlayerList = parsedCachedData.players.sample;
                     let newPlayerList = [ ];
 
-                    for ( i = 0; i < playerList.length; i++ )
+                    for ( i = 0; i < cachedPlayerList.length; i++ )
                     {
-                        if ( !cachedPlayerList || !cachedPlayerList.includes( playerList[ i ] ) )
+                        for ( j = 0; j < playerList.length; j++ )
                         {
-                            newPlayerList.push( playerList[ i ].name );
+                            if ( playerList[ j ].id == cachedPlayerList[ i ].id )
+                            {
+                                newPlayerList.push( playerList[ i ].name );
+                            }
                         }
                     }
 
