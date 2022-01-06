@@ -54,11 +54,19 @@ const get = function( address )
 
     let config = JSON.parse( data );
 
-    const key = address.split( '.| |[|]' );
+    const key = address
+        .replace( /\./g, ' ' )
+        .replace( /\[/g, ' ' )
+        .replace( /\]/g, ' ' )
+        .split( ' ' )
+        .filter( ( element ) =>
+        {
+            return element != '';
+        } );
 
     for ( i = 0; i < key.length; i++ )
     {
-        if ( !config[ key[ i ] ] )
+        if ( config[ key[ i ] ] === undefined )
         {
             return undefined;
         }

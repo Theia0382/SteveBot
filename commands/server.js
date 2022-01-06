@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require( '@discordjs/builders' );
 const serverInfo = require( '../modules/serverInfo.js' );
 const config = require( '../config' );
-const admin = require( '../modules/adminManager' );
+const isAdmin = require( '../modules/adminChecker' );
 
 module.exports =
 {
@@ -30,9 +30,9 @@ module.exports =
         }
         else if ( interaction.options.getSubcommandGroup( ) == '설정' )
         {
-            if ( !admin.isAdmin( interaction ) )
+            if ( !isAdmin( interaction ) )
             {
-                await interaction.reply( '관리자만 사용 가능한 명령입니다.' )
+                await interaction.reply( { content : '관리자만 사용 가능한 명령입니다.', ephemeral : true } )
                 return;
             }
             
