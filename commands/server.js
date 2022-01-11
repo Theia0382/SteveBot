@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require( '@discordjs/builders' );
-const serverInfo = require( '../modules/serverInfo.js' );
+const serverInfo = require( '../modules/showServerInfo' );
 const config = require( '../config' );
 const isAdmin = require( '../modules/adminChecker' );
 
@@ -26,7 +26,7 @@ module.exports =
     {
         if ( interaction.options.getSubcommand( ) == '정보' )
         {
-            serverInfo( interaction );
+            showServerInfo( interaction );
         }
         else if ( interaction.options.getSubcommandGroup( ) == '설정' )
         {
