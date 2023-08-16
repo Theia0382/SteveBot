@@ -110,22 +110,31 @@ class Server extends EventEmitter
 
             socket.setEncoding( 'utf-8' );
 
+            // 모든 data 합치기
+            let allData = '';
             socket.on( 'data', ( data ) =>
             {
-                socket.destroy( );
-                data = data.slice( data.indexOf( '{' ) );
-                data = JSON.parse( data );
+                allData += data;
 
-                if( Object.keys( data ).length == 0 )
+                // 모든 data를 받아왔는지 확인
+                // }}로 끝나는지를 통해 확인했는데 더 확실하고 좋은 방법이 없을까?
+                if ( allData.slice( -2 ) == '}}' )
                 {
-                    const error = new Error( );
-                    error.message = 'Received Empty JSON';
-                    error.code = 'NODATA'
-                    this.emit( 'error', error );
-                }
-                else
-                {
-                    this.emit( 'data', data );
+                    socket.destroy( );
+                    allData = allData.slice( allData.indexOf( '{' ) );
+                    allData = JSON.parse( allData );
+
+                    if( Object.keys( allData ).length == 0 )
+                    {
+                        const error = new Error( );
+                        error.message = 'Received Empty JSON';
+                        error.code = 'NODATA'
+                        this.emit( 'error', error );
+                    }
+                    else
+                    {
+                        this.emit( 'data', allData );
+                    }
                 }
             } );
         } );
