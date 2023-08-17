@@ -16,7 +16,7 @@ module.exports =
                     { name : '발전 과제', value : '발전_과제' },
                     { name : '블록', value : '블록' },
                     { name : '아이템', value : '아이템' },
-                    { name : '생물 군계', value : '생물 군계' },
+                    { name : '생물 군계', value : '생물_군계' },
                     { name : '마법 부여', value : '마법_부여' },
                     { name : '물약 양조', value : '물약_양조' },
                     { name : '몹', value : '몹' },
