@@ -74,7 +74,7 @@ module.exports =
                 if ( newplayer != null )
                 {
                     notificationConfig[ guildId ].active.newplayers = newplayer;
-                    console.log( notificationConfig );
+                    
                     updateJSON( notificationConfigPath, notificationConfig );
 
                     interaction.editReply( `이제 새로운 플레이어 알림 활성화 여부는 다음과 같습니다.\n: ${newplayer}` );
