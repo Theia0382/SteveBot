@@ -27,29 +27,27 @@ function init( client )
 
 function cacheServerInfo( client )
 {
-	console.log( 'CACHING START' );
-
 	const serverAddress = getJSON( serverAddressPath );
 	const serverInfo = getJSON( serverInfoPath );
 	const notificationConfig = getJSON( notificationConfigPath );
 
 	for ( guildId in serverAddress )
 	{
-		console.log( `caching ${guildId}` );
-
 		const server = new Server( guildId );
 
 		server.getInfo( ( error, info ) =>
 		{
 			if ( !error )
 			{
-				console.log( 'no error' );
 				if ( notificationConfig[ guildId ]?.active?.newplayers && info.players.online != 0 )
 				{
 					let players = [ ];
 					info.players.sample.forEach( player =>
 					{
-						players = players.concat( player.name );
+						if ( player.name !== 'Anonymous Player' )
+						{
+							players = players.concat( player.name );
+						}
 					} );
 
 					let newPlayers;
@@ -62,18 +60,17 @@ function cacheServerInfo( client )
 						let cachedPlayers = [ ];
 						serverInfo[ guildId ].players.sample.forEach( player =>
 						{
-							cachedPlayers = cachedPlayers.concat( player.name );
+							if ( player.name !== 'Anonymous Player' )
+							{
+								cachedPlayers = cachedPlayers.concat( player.name );
+							}
 						} );
 
 						newPlayers = players.filter( player => !cachedPlayers.includes( player ) );
 					}
 
-					console.log( `newplayers : ${newPlayers}` );
-
 					if ( newPlayers[ 0 ] != null )
 					{
-						console.log( 'notification' );
-	
 						let message = '';
 						for ( i = 0; i < newPlayers.length; i++ )
 						{
