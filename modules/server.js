@@ -82,6 +82,8 @@ class Server extends EventEmitter
             port = '25565';
         }
 
+        let info = '';
+
         const socket = new net.Socket;
 
         socket.setTimeout( 2000 );
@@ -110,38 +112,51 @@ class Server extends EventEmitter
 
             socket.setEncoding( 'utf-8' );
 
-            // 모든 data 합치기
-            let allData = '';
             socket.on( 'data', ( data ) =>
             {
-                allData += data;
-
-                // 모든 data를 받아왔는지 확인
-                // }}로 끝나는지를 통해 확인했는데 더 확실하고 좋은 방법이 없을까?
-                if ( allData.slice( -2 ) == '}}' )
-                {
-                    socket.destroy( );
-                    allData = allData.slice( allData.indexOf( '{' ) );
-                    allData = JSON.parse( allData );
-
-                    if( Object.keys( allData ).length == 0 )
-                    {
-                        const error = new Error( );
-                        error.message = 'Received Empty JSON';
-                        error.code = 'NODATA'
-                        this.emit( 'error', error );
-                    }
-                    else
-                    {
-                        this.emit( 'data', allData );
-                    }
-                }
+                console.log( "data recived" );
+                info += data;
             } );
         } );
 
         socket.on( 'error', ( error ) =>
         {
             this.emit( 'error', error );
+        } );
+
+        socket.on( 'end', ( ) =>
+        {
+            console.log( 'data end' );
+        } );
+
+        socket.on( 'timeout', ( ) =>
+        {
+            console.log( 'timeout' );
+            socket.destroy( );
+            info = info.slice( info.indexOf( '{' ) );
+            info = JSON.parse( info );
+
+            if( Object.keys( info ).length == 0 )
+            {
+                const error = new Error( );
+                error.message = 'Received Empty JSON';
+                error.code = 'NODATA'
+                this.emit( 'error', error );
+            }
+            else
+            {
+                this.emit( 'data', info );
+            }
+        } );
+
+        socket.on( 'close', ( ) =>
+        {
+            console.log( 'socket closed' );
+        } );
+
+        socket.on( 'end', ( ) =>
+        {
+            console.log( 'data end' );
         } );
 
         socket.connect( port, host );
