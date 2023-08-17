@@ -114,6 +114,6 @@ module.exports =
 		setInterval( ( ) => 
 		{
 			cacheServerInfo( client );
-		}, 10000 );
+		}, 30000 );
 	}
 };
