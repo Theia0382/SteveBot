@@ -1,8 +1,10 @@
 const net = require( 'net' );
-const EventEmitter = require( 'node:events' );
-const { getJSON, updateJSON } = require( '../modules/dataManager.js' );
+const { getJSON, updateJSON } = require( './accessJSON.js' );
+const path = require( 'node:path' );
 
-const serverAddress = getJSON( 'serverAddress' );
+const serverAddressPath = path.join( __dirname, '../data/serverAddress.json' );
+
+const serverAddress = getJSON( serverAddressPath );
 
 function writeVarInt( buffer, value )
 {
@@ -43,11 +45,10 @@ function flush( socket, buffer )
     socket.write( buffer );
 }
 
-class Server extends EventEmitter
+class Server
 {
     constructor( guildId )
     {
-        super( );
         this.id = guildId;
     }
 
@@ -55,7 +56,7 @@ class Server extends EventEmitter
     {
         serverAddress[ this.id ] = address;
         console.log( serverAddress );
-        updateJSON( 'serverAddress', serverAddress );
+        updateJSON( serverAddressPath, serverAddress );
     }
 
     getAddress( )
@@ -63,15 +64,14 @@ class Server extends EventEmitter
         return serverAddress[ this.id ];
     }
 
-    getInfo( )
+    getInfo( callback )
     {
         if ( serverAddress[ this.id ] === undefined )
         {
             const error = new Error( );
             error.message = `There is no registered address at GuildID: ${ this.id }`
             error.code = 'NOADDRESS';
-            this.emit( 'error', error );
-            return;
+            callback( error );
         }
 
         const host = serverAddress[ this.id ].split( ':' )[ 0 ];
@@ -114,24 +114,17 @@ class Server extends EventEmitter
 
             socket.on( 'data', ( data ) =>
             {
-                console.log( "data recived" );
                 info += data;
             } );
         } );
 
         socket.on( 'error', ( error ) =>
         {
-            this.emit( 'error', error );
-        } );
-
-        socket.on( 'end', ( ) =>
-        {
-            console.log( 'data end' );
+            callback( error );
         } );
 
         socket.on( 'timeout', ( ) =>
         {
-            console.log( 'timeout' );
             socket.destroy( );
             info = info.slice( info.indexOf( '{' ) );
             info = JSON.parse( info );
@@ -141,22 +134,12 @@ class Server extends EventEmitter
                 const error = new Error( );
                 error.message = 'Received Empty JSON';
                 error.code = 'NODATA'
-                this.emit( 'error', error );
+                callback( error );
             }
             else
             {
-                this.emit( 'data', info );
+                callback( null, info );
             }
-        } );
-
-        socket.on( 'close', ( ) =>
-        {
-            console.log( 'socket closed' );
-        } );
-
-        socket.on( 'end', ( ) =>
-        {
-            console.log( 'data end' );
         } );
 
         socket.connect( port, host );
