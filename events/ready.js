@@ -44,10 +44,7 @@ function cacheServerInfo( client )
 					let players = [ ];
 					info.players.sample.forEach( player =>
 					{
-						if ( player.name !== 'Anonymous Player' )
-						{
-							players = players.concat( player.name );
-						}
+						players = players.concat( player.name );
 					} );
 
 					let newPlayers;
@@ -60,10 +57,7 @@ function cacheServerInfo( client )
 						let cachedPlayers = [ ];
 						serverInfo[ guildId ].players.sample.forEach( player =>
 						{
-							if ( player.name !== 'Anonymous Player' )
-							{
-								cachedPlayers = cachedPlayers.concat( player.name );
-							}
+							cachedPlayers = cachedPlayers.concat( player.name );
 						} );
 
 						newPlayers = players.filter( player => !cachedPlayers.includes( player ) );
