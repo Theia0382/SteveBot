@@ -127,9 +127,15 @@ class Server
         {
             socket.destroy( );
             info = info.slice( info.indexOf( '{' ) );
-            info = JSON.parse( info );
 
-            if( Object.keys( info ).length == 0 )
+            if( info.length == 0 || !JSON.parse( info ) )
+            {
+                const error = new Error( );
+                error.message = 'Received Empty JSON';
+                error.code = 'NODATA'
+                callback( error );
+            }
+            else if ( Object.keys( JSON.parse( info ) ).length == 0 )
             {
                 const error = new Error( );
                 error.message = 'Received Empty JSON';
@@ -138,6 +144,40 @@ class Server
             }
             else
             {
+                info = JSON.parse( info );
+
+                if ( info.players.online != 0 )
+                {
+                    let comp = [];
+                	info.players.sample.forEach( player =>
+                	{
+                		if ( !comp.includes( player ) )
+                        {
+                            comp.push( player );
+                        }
+                	} );
+                
+                    for ( let i = 0; i < comp.length ; i++ ) 
+                    {
+                        if ( comp[ i ].name == 'Anonymous Player' )
+                        {
+                            comp.splice( i, 1 );
+                            i--;
+                        }
+                    }
+                
+                    info.players.online = comp.length;
+                
+                    if ( comp.length == 0 )
+                    {
+                        delete info.players.sample;
+                    }
+                    else
+                    {
+                        info.players.sample = comp;
+                    }
+                }
+
                 callback( null, info );
             }
         } );
